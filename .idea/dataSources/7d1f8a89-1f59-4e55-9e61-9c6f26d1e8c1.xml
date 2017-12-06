@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="kopas@1.201.142.86">
-  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.7">
     <root id="1"/>
     <schema id="2" parent="1" name="kopas">
       <Current>1</Current>
@@ -943,7 +943,7 @@ companyId</ColNames>
     </column>
     <column id="245" parent="94" name="gugunID">
       <Position>2</Position>
-      <Comment>군 아이디 </Comment>
+      <Comment>군 아이디</Comment>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>

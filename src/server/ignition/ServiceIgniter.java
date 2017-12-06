@@ -93,6 +93,8 @@ public class ServiceIgniter extends BaseIgniter{
             res.type(RestConstant.RESPONSE_TYPE_JSON);
         });
 
+        super.enableCORS(service, "*", "GET, PUT, DELETE, POST, OPTIONS", "Access-Control-Allow-Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
         super.get(service, "/system", (req, res) -> new Response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS, System.getenv()), "서버 시스템 환경을 확인하기 위한 API 입니다.");
 
         super.post(service, "/web/user/check/password", (req, res) -> {
@@ -247,7 +249,8 @@ public class ServiceIgniter extends BaseIgniter{
                 }
             }
             return new Response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS, "There is no valid member id. Ignoring this request. :(");
-        }, "<p class='emp'>디바이스</p>앱 실행 시 마다 호출되는 시작 프로세스로 memberId가 없을 경우, 업데이트를 수행하지 않습니다. 정상 업데이트의 경우, 회원정보가 반환됩니다.", "memberId", "regKey", "deviceType", "lastIp");
+        }, "<p class='emp'>디바이스</p>앱 실행 시 마다 호출되는 시작 프로세스로 memberId가 없을 경우, 업데이트를 수행하지 않습니다. 정상 업데이트의 경우, 회원정보가 반환됩니다.",
+                "memberId", "regKey", "deviceType", "lastIp");
 
         super.post(service, "/web/user/join", (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
@@ -260,7 +263,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "직원용 APP 회원가입을 위한 API입니다. <b>본 API를 통해 호출 시 대기회원으로 저장됩니다.</b>", "email", "password", "name", "phone", "deviceType", "regKey", "lastIp");
+        }, "직원용 APP 회원가입을 위한 API입니다. <b>본 API를 통해 호출 시 대기회원으로 저장됩니다.</b>",
+                "email", "password", "name", "phone", "deviceType", "regKey", "lastIp");
 
         super.get(service, "/web/user/find/email", (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
@@ -320,12 +324,14 @@ public class ServiceIgniter extends BaseIgniter{
 
             ListBox retVal = commonSVC.getCompanyList(page, limit, search, sido, gungu);
             return new Response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS, retVal);
-        }, "근무지 목록을 취득하기 위한 API입니다. 시/도 번호 혹은 시/군/구 번호와 상호를 통해 검색할 수 있으며, 전체 범위는 <b>-1</b>로 약속합니다.", "page[Optional]", "limit[Optional]", "search[Optional]", "sido[Optional]", "gungu[Optional]");
+        }, "근무지 목록을 취득하기 위한 API입니다. 시/도 번호 혹은 시/군/구 번호와 상호를 통해 검색할 수 있으며, 전체 범위는 <b>-1</b>로 약속합니다.",
+                "page[Optional]", "limit[Optional]", "search[Optional]", "sido[Optional]", "gungu[Optional]");
 
         super.post(service, "reg/invite", (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
             return new Response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS);
-        }, "<font color=red><b class='emp'>미구현</b></font> 초대장 작성을 위한 API입니다. 인가된 사용자만 본 기능을 호출하도록 구현되어야 합니다.", "memberId");
+        }, "<font color=red><b class='emp'>미구현</b></font> 초대장 작성을 위한 API입니다. 인가된 사용자만 본 기능을 호출하도록 구현되어야 합니다.",
+                "memberId");
 
         super.get(service, "/info/board/:mode", (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
@@ -339,7 +345,8 @@ public class ServiceIgniter extends BaseIgniter{
             }
             ListBox retVal = commonSVC.getBoardList(page, limit, company, search, mode);
             return new Response(ResponseConst.CODE_SUCCESS, ResponseConst.MSG_SUCCESS, retVal);
-        }, "게시판 글 목록을 취득하기 위한 API 입니다. REST 파라미터인 :mode에 타입을 전송하면 그에 맞는 게시판 글이 리스팅됩니다. [0:Notice/1:FAQ/2:Q&A]", "mode[REST]", "page[Optional]", "limit[Optional]", "search[Optional]", "company[Integral/Must be -1 when the mode is not 0]");
+        }, "게시판 글 목록을 취득하기 위한 API 입니다. REST 파라미터인 :mode에 타입을 전송하면 그에 맞는 게시판 글이 리스팅됩니다. [0:Notice/1:FAQ/2:Q&A]",
+                "mode[REST]", "page[Optional]", "limit[Optional]", "search[Optional]", "company[Integral/Must be -1 when the mode is not 0]");
         // TODO the way to generate accessToken and authorize the devices without abusing
 
         super.get(service, "/info/board/detail/:id", (req, res) -> {
@@ -377,7 +384,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "사용자의 근무지 삭제를 위한 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 삭제하고자 하는 회사의 키를 함께 전송해야 합니다.", "id[REST]", "companyId");
+        }, "사용자의 근무지 삭제를 위한 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 삭제하고자 하는 회사의 키를 함께 전송해야 합니다.",
+                "id[REST]", "companyId");
 
         super.get(service, "/info/company/:id", (req, res) -> {
             DataMap map = RestProcessor.makeProcessData(req.raw());
@@ -402,7 +410,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "사용자의 근무지 등록을 위한 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 등록하고자 하는 회사의 키와 권한를 함께 전송해야 합니다.", "id[REST]", "companyId", "permission[H:100/M:110/L:120/U:130]");
+        }, "사용자의 근무지 등록을 위한 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 등록하고자 하는 회사의 키와 권한를 함께 전송해야 합니다.",
+                "id[REST]", "companyId", "permission[H:100/M:110/L:120/U:130]");
 
         //TODO 승인코드 발급 및 DB처리
         super.post(service, "/confirm/workplace/:id", (req, res) -> {
@@ -417,7 +426,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "사용자가 등록한 근무지에 대한 승인코드 확인 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 승인하고자 하는 회사의 키와 토큰을 전송해야 합니다.", "id[REST]", "companyId", "token");
+        }, "사용자가 등록한 근무지에 대한 승인코드 확인 API 입니다. REST 파라미터를 통해 사용자 번호를 전송하고, 승인하고자 하는 회사의 키와 토큰을 전송해야 합니다.",
+                "id[REST]", "companyId", "token");
 
         super.post(service, "/gesture/gate/:id", (req, res) -> {
             final int id = Integer.parseInt(req.params(":id"));
@@ -432,7 +442,8 @@ public class ServiceIgniter extends BaseIgniter{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_FAILURE);
             }
 
-        }, "출입문 제스처 허용을 위한 API 입니다. REST 파라미터로 사용자 번호를 전송하고, 해당 번호에 할당된 값이 있는 경우 실패를 반환하고, 없는 경우 등록합니다.", "id[REST]", "gateId");
+        }, "출입문 제스처 허용을 위한 API 입니다. REST 파라미터로 사용자 번호를 전송하고, 해당 번호에 할당된 값이 있는 경우 실패를 반환하고, 없는 경우 등록합니다.",
+                "id[REST]", "gateId");
 
         super.post(service, "/undogesture/gate/:id", (req, res) -> {
             final int id = Integer.parseInt(req.params(":id"));
@@ -445,7 +456,8 @@ public class ServiceIgniter extends BaseIgniter{
                 else return new Response(ResponseConst.CODE_NOT_EXISTING, ResponseConst.MSG_NOT_EXISTING);
             }
             else return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
-        }, "출입문 제스처 비활성을 위한 API 입니다. REST 파라미터로 사용자 번호를 전송하고, 기존에 허용된 문이 없는 경우 실패를 반환하고, 있는 경우 삭제합니다.", "id[REST", "gateId");
+        }, "출입문 제스처 비활성을 위한 API 입니다. REST 파라미터로 사용자 번호를 전송하고, 기존에 허용된 문이 없는 경우 실패를 반환하고, 있는 경우 삭제합니다.",
+                "id[REST", "gateId");
 
         super.post(service, "/like/gate/:id", (req, res) -> {
             final int id = Integer.parseInt(req.params(":id"));
@@ -485,7 +497,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "한 근무지의 출입문 리스트를 취득하기 위한 API 입니다. REST 파라미터는 회사의 근무지의 고유번호이며, 현재 로그인된 회원번호를 함께 전송하여야 합니다. (즐겨찾기 표시를 위해)", "companyId[REST]", "memberId");
+        }, "한 근무지의 출입문 리스트를 취득하기 위한 API 입니다. REST 파라미터는 회사의 근무지의 고유번호이며, 현재 로그인된 회원번호를 함께 전송하여야 합니다. (즐겨찾기 표시를 위해)",
+                "companyId[REST]", "memberId");
 
         super.get(service, "/info/gates/favored/:id", (req, res) -> {
             final int memberId = Integer.parseInt(req.params(":id"));
@@ -504,7 +517,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "비콘의 UUID를 통해 해당 장치에 연결된 출입문 리스트를 반환합니다. <p class='emp'>위 API 와 유사하니 혼동에 주의하시기 바랍니다.</p>", "beaconSN", "major", "minor");
+        }, "비콘의 UUID를 통해 해당 장치에 연결된 출입문 리스트를 반환합니다. <p class='emp'>위 API 와 유사하니 혼동에 주의하시기 바랍니다.</p>",
+                "beaconSN", "major", "minor");
 
         //TODO 출입문 상태(정상/에러)
         super.get(service, "/info/gate/detail/:id", (req, res) -> {
@@ -558,7 +572,8 @@ public class ServiceIgniter extends BaseIgniter{
             }else{
                 return new Response(ResponseConst.CODE_INVALID_PARAM, ResponseConst.MSG_INVALID_PARAM);
             }
-        }, "한 출입문에 대해 출근/퇴근 처리를 진행합니다. REST 파라미터로 받은 유저를 대상으로 출근/퇴근 투플을 삽입합니다.", "id[REST]", "gateId", "classifier", "type");
+        }, "한 출입문에 대해 출근/퇴근 처리를 진행합니다. REST 파라미터로 받은 유저를 대상으로 출근/퇴근 투플을 삽입합니다.",
+                "id[REST]", "gateId", "classifier", "type");
 
         /**
          * 이미지 업로드 모듈 테스트임 - 관리자 API 개발 시 진행 예정
